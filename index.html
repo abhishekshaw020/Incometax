@@ -7,150 +7,173 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(120deg, #f4f4f4, #dfe9f3);
-            text-align: center;
-            padding: 20px;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
             display: flex;
         }
+
         .sidebar {
             width: 300px;
-            background: #007bff;
+            background-color: #007bff;
             color: white;
             padding: 20px;
             height: 100vh;
             position: fixed;
-            left: 0;
             top: 0;
-            overflow-y: auto;
+            left: 0;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
-        .content {
-            margin-left: 320px;
-            flex-grow: 1;
+
+        .sidebar h3, .sidebar h4 {
+            font-size: 22px;
+            margin-top: 20px;
         }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+
         .calculator {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-            max-width: 450px;
-            margin: auto;
+            margin-left: 350px;
+            padding: 40px;
+            max-width: 600px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
         }
-        input, button, select {
+
+        .calculator input, .calculator select {
             width: 100%;
-            padding: 12px;
-            margin-top: 10px;
+            padding: 10px;
+            margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
-            font-size: 16px;
         }
+
         button {
+            padding: 12px;
             background-color: #007bff;
             color: white;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #0056b3;
         }
-        #result {
-            margin-top: 15px;
-            font-weight: bold;
-            font-size: 20px;
-            color: #007bff;
+
+        #taxResult {
+            margin-top: 20px;
+        }
+
+        #taxResult p {
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
     <div class="sidebar">
         <h3>About Income Tax</h3>
-        <p>Paying income tax is essential for nation-building, funding public services, and maintaining infrastructure.</p>
-        <h4>Benefits of Paying Taxes on Time</h4>
+        <p>Income tax is a crucial part of the economy, funding public services and infrastructure development.</p>
+
+        <h4>Benefits of Paying Taxes</h4>
         <ul>
             <li>Avoid penalties and legal issues</li>
             <li>Better credit score</li>
-            <li>Eligible for tax rebates and deductions</li>
-            <li>Contributes to national development</li>
+            <li>Eligibility for rebates and deductions</li>
+            <li>Contributes to national progress</li>
         </ul>
-        <h4>Important Income Tax Sections</h4>
+
+        <h4>Tax Slabs (2025-26)</h4>
         <ul>
-            <li><b>Section 80C</b>: Deductions on investments (PPF, EPF, LIC, etc.)</li>
-            <li><b>Section 80D</b>: Deductions on health insurance premiums</li>
-            <li><b>Section 24(b)</b>: Home loan interest deductions</li>
-            <li><b>Section 87A</b>: Tax rebate for income up to ₹7 lakh</li>
+            <li><b>₹0 - ₹4 Lakh:</b> Nil</li>
+            <li><b>₹4 Lakh - ₹8 Lakh:</b> 5%</li>
+            <li><b>₹8 Lakh - ₹12 Lakh:</b> 10%</li>
+            <li><b>₹12 Lakh - ₹16 Lakh:</b> 15%</li>
+            <li><b>₹16 Lakh - ₹20 Lakh:</b> 20%</li>
+            <li><b>₹20 Lakh - ₹24 Lakh:</b> 25%</li>
+            <li><b>Above ₹24 Lakh:</b> 30%</li>
         </ul>
+
+        
     </div>
 
-    <div class="content">
-        <div class="calculator">
-            <h2>Advanced Income Tax Calculator</h2>
-            <input type="number" id="income" placeholder="Enter your annual income" min="0">
-            <input type="number" id="hraReceived" placeholder="Enter HRA received" min="0">
-            <input type="number" id="rentPaid" placeholder="Enter rent paid" min="0">
-            <input type="number" id="basicSalary" placeholder="Enter basic salary" min="0">
-            <select id="ageGroup">
-                <option value="below60">Below 60 years</option>
-                <option value="60to80">60 to 80 years</option>
-                <option value="80plus">80 years or more</option>
+    <div class="calculator">
+        <h2>Income Tax Calculator</h2>
+        <form id="taxForm">
+            <label for="income">Annual Income (₹): </label>
+            <input type="number" id="income" name="income" required>
+
+            <label for="age">Age: </label>
+            <input type="number" id="age" name="age" required>
+
+            <label for="regime">Select Tax Regime: </label>
+            <select id="regime" name="regime">
+                <option value="new">New Tax Regime</option>
+                <option value="old">Old Tax Regime</option>
             </select>
-            <select id="employmentType">
+
+            <label for="occupation">Select Occupation: </label>
+            <select id="occupation" name="occupation">
                 <option value="salaried">Salaried</option>
                 <option value="business">Business Owner</option>
             </select>
-            <select id="taxRegime">
-                <option value="old">Old Tax Regime</option>
-                <option value="new">New Tax Regime</option>
-            </select>
-            <button onclick="calculateTax()">Calculate Tax</button>
-            <p id="result"></p>
+
+            <button type="button" onclick="calculateTax()">Calculate Tax</button>
+        </form>
+
+        <div id="taxResult">
+            <h3>Tax Calculation Breakdown</h3>
+            <p id="taxAmount">Tax: ₹0</p>
+            <p id="deductions">Deductions: ₹0</p>
         </div>
     </div>
 
     <script>
-        function calculateHRA() {
-            let hraReceived = parseFloat(document.getElementById("hraReceived").value) || 0;
-            let rentPaid = parseFloat(document.getElementById("rentPaid").value) || 0;
-            let basicSalary = parseFloat(document.getElementById("basicSalary").value) || 0;
-
-            let actualHRA = hraReceived;
-            let rentMinus10Percent = rentPaid - (0.1 * basicSalary);
-            let fiftyPercentBasic = 0.5 * basicSalary;
-
-            return Math.max(0, Math.min(actualHRA, rentMinus10Percent, fiftyPercentBasic));
-        }
-
         function calculateTax() {
-            let income = parseFloat(document.getElementById("income").value) || 0;
-            let hraExemption = calculateHRA();
-            let taxableIncome = income - hraExemption;
-            let regime = document.getElementById("taxRegime").value;
-            let ageGroup = document.getElementById("ageGroup").value;
-            let tax = 0;
+            var income = parseFloat(document.getElementById("income").value);
+            var age = parseInt(document.getElementById("age").value);
+            var regime = document.getElementById("regime").value;
+            var occupation = document.getElementById("occupation").value;
+            var taxAmount = 0;
+            var deductions = 0;
 
-            if (taxableIncome < 0) taxableIncome = 0;
-
-            if (regime === "old") {
-                if (ageGroup === "below60") {
-                    if (taxableIncome <= 250000) tax = 0;
-                    else if (taxableIncome <= 500000) tax = (taxableIncome - 250000) * 0.05;
-                    else if (taxableIncome <= 1000000) tax = 12500 + (taxableIncome - 500000) * 0.2;
-                    else tax = 112500 + (taxableIncome - 1000000) * 0.3;
-                } else if (ageGroup === "60to80") {
-                    if (taxableIncome <= 300000) tax = 0;
-                    else if (taxableIncome <= 500000) tax = (taxableIncome - 300000) * 0.05;
-                    else if (taxableIncome <= 1000000) tax = 10000 + (taxableIncome - 500000) * 0.2;
-                    else tax = 112500 + (taxableIncome - 1000000) * 0.3;
-                } else {
-                    if (taxableIncome <= 500000) tax = 0;
-                    else if (taxableIncome <= 1000000) tax = (taxableIncome - 500000) * 0.2;
-                    else tax = 112500 + (taxableIncome - 1000000) * 0.3;
-                }
-            } else {
-                if (taxableIncome <= 300000) tax = 0;
-                else if (taxableIncome <= 700000) tax = (taxableIncome - 300000) * 0.05;
-                else if (taxableIncome <= 1000000) tax = 20000 + (taxableIncome - 700000) * 0.1;
-                else tax = 140000 + (taxableIncome - 1500000) * 0.3;
+            // Deduction logic for new regime
+            if (income <= 1200000 && regime === "new") {
+                taxAmount = 0;
+                deductions = "N/A for new regime";
+            } else if (regime === "new") {
+                if (income <= 400000) taxAmount = 0;
+                else if (income <= 800000) taxAmount = (income - 400000) * 0.05;
+                else if (income <= 1200000) taxAmount = (income - 800000) * 0.1 + 20000;
+                else if (income <= 1600000) taxAmount = (income - 1200000) * 0.15 + 60000;
+                else if (income <= 2000000) taxAmount = (income - 1600000) * 0.2 + 120000;
+                else if (income <= 2400000) taxAmount = (income - 2000000) * 0.25 + 200000;
+                else taxAmount = (income - 2400000) * 0.3 + 300000;
             }
 
-            document.getElementById("result").innerText = "Your estimated tax: ₹" + tax.toFixed(2);
+            // Logic for old tax regime
+            if (regime === "old") {
+                if (income <= 300000) taxAmount = 0;
+                else if (income <= 700000) taxAmount = (income - 300000) * 0.05;
+                else if (income <= 1000000) taxAmount = (income - 700000) * 0.1 + 20000;
+                else if (income <= 1200000) taxAmount = (income - 1000000) * 0.15 + 50000;
+                else if (income <= 1500000) taxAmount = (income - 1200000) * 0.2 + 80000;
+                else taxAmount = (income - 1500000) * 0.3 + 140000;
+            }
+
+            document.getElementById("taxAmount").innerHTML = "Tax: ₹" + taxAmount.toFixed(2);
+            document.getElementById("deductions").innerHTML = "Deductions: " + deductions;
         }
     </script>
 </body>
