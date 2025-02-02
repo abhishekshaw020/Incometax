@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Income Tax Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(120deg, #f4f4f4, #dfe9f3);
+            text-align: center;
+            padding: 20px;
+            display: flex;
+        }
+        .sidebar {
+            width: 300px;
+            background: #007bff;
+            color: white;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+        }
+        .content {
+            margin-left: 320px;
+            flex-grow: 1;
+        }
+        .calculator {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            max-width: 450px;
+            margin: auto;
+        }
+        input, button, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 20px;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h3>About Income Tax</h3>
+        <p>Paying income tax is essential for nation-building, funding public services, and maintaining infrastructure.</p>
+        <h4>Benefits of Paying Taxes on Time</h4>
+        <ul>
+            <li>Avoid penalties and legal issues</li>
+            <li>Better credit score</li>
+            <li>Eligible for tax rebates and deductions</li>
+            <li>Contributes to national development</li>
+        </ul>
+        <h4>Important Income Tax Sections</h4>
+        <ul>
+            <li><b>Section 80C</b>: Deductions on investments (PPF, EPF, LIC, etc.)</li>
+            <li><b>Section 80D</b>: Deductions on health insurance premiums</li>
+            <li><b>Section 24(b)</b>: Home loan interest deductions</li>
+            <li><b>Section 87A</b>: Tax rebate for income up to ₹7 lakh</li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <div class="calculator">
+            <h2>Advanced Income Tax Calculator</h2>
+            <input type="number" id="income" placeholder="Enter your annual income" min="0">
+            <input type="number" id="hraReceived" placeholder="Enter HRA received" min="0">
+            <input type="number" id="rentPaid" placeholder="Enter rent paid" min="0">
+            <input type="number" id="basicSalary" placeholder="Enter basic salary" min="0">
+            <select id="ageGroup">
+                <option value="below60">Below 60 years</option>
+                <option value="60to80">60 to 80 years</option>
+                <option value="80plus">80 years or more</option>
+            </select>
+            <select id="employmentType">
+                <option value="salaried">Salaried</option>
+                <option value="business">Business Owner</option>
+            </select>
+            <select id="taxRegime">
+                <option value="old">Old Tax Regime</option>
+                <option value="new">New Tax Regime</option>
+            </select>
+            <button onclick="calculateTax()">Calculate Tax</button>
+            <p id="result"></p>
+        </div>
+    </div>
+
+    <script>
+        function calculateHRA() {
+            let hraReceived = parseFloat(document.getElementById("hraReceived").value) || 0;
+            let rentPaid = parseFloat(document.getElementById("rentPaid").value) || 0;
+            let basicSalary = parseFloat(document.getElementById("basicSalary").value) || 0;
+
+            let actualHRA = hraReceived;
+            let rentMinus10Percent = rentPaid - (0.1 * basicSalary);
+            let fiftyPercentBasic = 0.5 * basicSalary;
+
+            return Math.max(0, Math.min(actualHRA, rentMinus10Percent, fiftyPercentBasic));
+        }
+
+        function calculateTax() {
+            let income = parseFloat(document.getElementById("income").value) || 0;
+            let hraExemption = calculateHRA();
+            let taxableIncome = income - hraExemption;
+            let regime = document.getElementById("taxRegime").value;
+            let ageGroup = document.getElementById("ageGroup").value;
+            let tax = 0;
+
+            if (taxableIncome < 0) taxableIncome = 0;
+
+            if (regime === "old") {
+                if (ageGroup === "below60") {
+                    if (taxableIncome <= 250000) tax = 0;
+                    else if (taxableIncome <= 500000) tax = (taxableIncome - 250000) * 0.05;
+                    else if (taxableIncome <= 1000000) tax = 12500 + (taxableIncome - 500000) * 0.2;
+                    else tax = 112500 + (taxableIncome - 1000000) * 0.3;
+                } else if (ageGroup === "60to80") {
+                    if (taxableIncome <= 300000) tax = 0;
+                    else if (taxableIncome <= 500000) tax = (taxableIncome - 300000) * 0.05;
+                    else if (taxableIncome <= 1000000) tax = 10000 + (taxableIncome - 500000) * 0.2;
+                    else tax = 112500 + (taxableIncome - 1000000) * 0.3;
+                } else {
+                    if (taxableIncome <= 500000) tax = 0;
+                    else if (taxableIncome <= 1000000) tax = (taxableIncome - 500000) * 0.2;
+                    else tax = 112500 + (taxableIncome - 1000000) * 0.3;
+                }
+            } else {
+                if (taxableIncome <= 300000) tax = 0;
+                else if (taxableIncome <= 700000) tax = (taxableIncome - 300000) * 0.05;
+                else if (taxableIncome <= 1000000) tax = 20000 + (taxableIncome - 700000) * 0.1;
+                else tax = 140000 + (taxableIncome - 1500000) * 0.3;
+            }
+
+            document.getElementById("result").innerText = "Your estimated tax: ₹" + tax.toFixed(2);
+        }
+    </script>
+</body>
+</html>
